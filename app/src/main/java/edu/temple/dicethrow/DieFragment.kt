@@ -15,6 +15,7 @@ class DieFragment : Fragment() {
     lateinit var dieTextView: TextView
 
     var dieSides: Int = 6
+    var currentRoll = dieSides
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,12 +39,10 @@ class DieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rollDie()
-        view.setOnClickListener{
-            rollDie()
-        }
     }
 
     fun rollDie() {
-        dieTextView.text = (Random.nextInt(dieSides) + 1).toString()
+        currentRoll = Random.nextInt(dieSides) + 1
+        dieTextView.text = currentRoll.toString()
     }
 }
