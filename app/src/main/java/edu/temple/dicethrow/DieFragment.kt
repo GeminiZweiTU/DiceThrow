@@ -41,14 +41,12 @@ class DieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // If we have a saved face, show it; otherwise roll once
         if (currentRoll != null) {
             dieTextView.text = currentRoll.toString()
         } else {
             rollDie()
         }
 
-        // Optional: tap to re-roll
         view.setOnClickListener { rollDie() }
         }
 
@@ -60,5 +58,5 @@ class DieFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         currentRoll?.let { outState.putInt(CURRENT_ROLL_KEY, it) }
-}
+    }
 }
