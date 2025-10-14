@@ -10,20 +10,22 @@ import kotlin.random.Random
 
 class DieFragment : Fragment() {
 
-    val DIESIDE = "sidenumber"
+    companion object {
+        private const val DIESIDE = "sidenumber"
+        private const val CURRENT_ROLL_KEY = "currentroll"
+    }
 
     lateinit var dieTextView: TextView
 
     var dieSides: Int = 6
-    var currentRoll = dieSides
+    var currentRoll: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            it.getInt(DIESIDE).run {
-                dieSides = this
-            }
-        }
+        // Get sides (default 6 if not passed)
+        dieSides = arguments?.getInt(DIESIDE, 6) ?: 6
+        // Restore saved roll if present
+        currentRoll = savedInstanceState?.getInt(CURRENT_ROLL_KEY)
     }
 
     override fun onCreateView(
@@ -38,11 +40,25 @@ class DieFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rollDie()
-    }
+
+        // If we have a saved face, show it; otherwise roll once
+        if (currentRoll != null) {
+            dieTextView.text = currentRoll.toString()
+        } else {
+            rollDie()
+        }
+
+        // Optional: tap to re-roll
+        view.setOnClickListener { rollDie() }
+        }
 
     fun rollDie() {
-        currentRoll = Random.nextInt(dieSides) + 1
+        currentRoll = Random.nextInt(1, dieSides + 1)
         dieTextView.text = currentRoll.toString()
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        currentRoll?.let { outState.putInt(CURRENT_ROLL_KEY, it) }
+}
 }
