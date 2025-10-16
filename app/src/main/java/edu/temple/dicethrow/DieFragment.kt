@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import kotlin.random.Random
@@ -13,7 +14,6 @@ class DieFragment : Fragment() {
 
     companion object {
         private const val DIESIDE = "sidenumber"
-        private const val CURRENT_ROLL_KEY = "currentroll"
 
         fun newInstance(sides: Int): DieFragment =
             DieFragment().apply {
@@ -23,15 +23,11 @@ class DieFragment : Fragment() {
 
     lateinit var dieTextView: TextView
 
-    var dieSides: Int = 6
+    private val dieSides: Int by lazy { arguments?.getInt(DIESIDE, 6) ?: 6 }
     var currentRoll: Int? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // Get sides (default 6 if not passed)
-        dieSides = arguments?.getInt(DIESIDE, 6) ?: 6
-        // Restore saved roll if present
-        currentRoll = savedInstanceState?.getInt(CURRENT_ROLL_KEY)
+    private val viewModel: DieViewModel by viewModels {
+        DieViewModelFactory(dieSides)
     }
 
     override fun onCreateView(
@@ -47,22 +43,17 @@ class DieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (currentRoll != null) {
-            dieTextView.text = currentRoll.toString()
-        } else {
-            rollDie()
+        // Observe roll value and update UI
+        viewModel.currentRoll.observe(viewLifecycleOwner) { roll ->
+            dieTextView.text = roll.toString()
         }
 
-        view.setOnClickListener { rollDie() }
-        }
+        // Tap anywhere in the fragment to roll again
+        view.setOnClickListener { viewModel.roll() }
+    }
 
     fun rollDie() {
         currentRoll = Random.nextInt(1, dieSides + 1)
         dieTextView.text = currentRoll.toString()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        currentRoll?.let { outState.putInt(CURRENT_ROLL_KEY, it) }
     }
 }
