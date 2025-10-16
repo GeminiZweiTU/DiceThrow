@@ -26,9 +26,7 @@ class DieFragment : Fragment() {
     private val dieSides: Int by lazy { arguments?.getInt(DIESIDE, 6) ?: 6 }
     var currentRoll: Int? = null
 
-    private val viewModel: DieViewModel by viewModels {
-        DieViewModelFactory(dieSides)
-    }
+    private val viewModel: DieViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
