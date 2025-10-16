@@ -1,14 +1,13 @@
 package edu.temple.dicethrow
 
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import android.widget.TextView
-import androidx.core.os.bundleOf
-import kotlin.random.Random
 
 class DieFragment : Fragment() {
 
@@ -24,7 +23,6 @@ class DieFragment : Fragment() {
     lateinit var dieTextView: TextView
 
     private val dieSides: Int by lazy { arguments?.getInt(DIESIDE, 6) ?: 6 }
-    var currentRoll: Int? = null
 
     private val viewModel: DieViewModel by viewModels()
 
@@ -51,10 +49,5 @@ class DieFragment : Fragment() {
 
         // Tap anywhere in the viewmodel to roll again
         view.setOnClickListener { viewModel.roll(dieSides) }
-    }
-
-    fun rollDie() {
-        currentRoll = Random.nextInt(1, dieSides + 1)
-        dieTextView.text = currentRoll.toString()
     }
 }
