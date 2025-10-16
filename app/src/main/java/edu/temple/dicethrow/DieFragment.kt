@@ -46,8 +46,11 @@ class DieFragment : Fragment() {
             dieTextView.text = roll.toString()
         }
 
-        // Tap anywhere in the fragment to roll again
-        view.setOnClickListener { viewModel.roll() }
+        // Roll immediately once on creation
+        viewModel.roll(dieSides)
+
+        // Tap anywhere in the viewmodel to roll again
+        view.setOnClickListener { viewModel.roll(dieSides) }
     }
 
     fun rollDie() {
