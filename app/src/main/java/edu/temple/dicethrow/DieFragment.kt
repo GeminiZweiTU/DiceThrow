@@ -19,7 +19,6 @@ class DieFragment : Fragment() {
                 arguments = bundleOf(DIESIDE to sides)
             }
     }
-
     lateinit var dieTextView: TextView
 
     private val dieSides: Int by lazy { arguments?.getInt(DIESIDE, 6) ?: 6 }
@@ -39,15 +38,11 @@ class DieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Observe roll value and update UI
         viewModel.currentRoll.observe(viewLifecycleOwner) { roll ->
             dieTextView.text = roll.toString()
         }
 
-        // Roll immediately once on creation
         viewModel.roll(dieSides)
-
-        // Tap anywhere in the viewmodel to roll again
         view.setOnClickListener { viewModel.roll(dieSides) }
     }
 }
