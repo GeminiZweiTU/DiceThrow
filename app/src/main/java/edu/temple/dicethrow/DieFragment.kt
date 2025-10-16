@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import kotlin.random.Random
 
 class DieFragment : Fragment() {
@@ -13,6 +14,11 @@ class DieFragment : Fragment() {
     companion object {
         private const val DIESIDE = "sidenumber"
         private const val CURRENT_ROLL_KEY = "currentroll"
+
+        fun newInstance(sides: Int): DieFragment =
+            DieFragment().apply {
+                arguments = bundleOf(DIESIDE to sides)
+            }
     }
 
     lateinit var dieTextView: TextView
